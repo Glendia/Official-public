@@ -1,7 +1,7 @@
 ---
 layout: 错误页面
 ---
-    <div class='newContent'>
+<div class='newContent'>
         <p><br/></p>
         <p><br/></p>
         <p><br/></p>
