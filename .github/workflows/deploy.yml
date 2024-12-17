@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -8,19 +8,29 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # 确保有足够的权限来推送到 GitHub Pages
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3  # 使用最新版本的 checkout 动作
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: 22
-      - run: npm i pnpm -g
-      - run: pnpm install
+          node-version: 22  # 确保使用正确的 Node.js 版本
+
+      - name: Install pnpm
+        run: npm i -g pnpm  # 安装 pnpm
+
+      - name: Install dependencies
+        run: pnpm install  # 使用 pnpm 安装依赖
 
       - name: Build
-        run: pnpm build
+        run: pnpm build  # 构建项目
 
-      - name: Deploy
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: pages/dist
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # 使用 GitHub 提供的秘钥
+          publish_dir: ./dist  # 确保这里路径正确，指向构建输出的目录
+          publish_branch: gh-pages  # 指定发布到的分支
