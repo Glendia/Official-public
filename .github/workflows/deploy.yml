@@ -1,0 +1,62 @@
+name: Deploy VitePress to GitHub Pages and OSS, then Refresh CDN
+
+on:
+  push:
+    branches:
+      - main
+  # 你可以根据需要添加其他触发条件
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '22' # 根据你的项目需求设置Node.js版本
+
+    - name: Install pnpm
+      run: npm install -g pnpm
+
+    - name: Install dependencies
+      run: pnpm install
+
+    - name: Build VitePress
+      run: pnpm run build # 确保你的package.json中有相应的script
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: pages/.vitepress/dist
+        publish_branch: gh-pages
+
+    - name: Upload to OSS
+      env:
+        OSS_BUCKET: ${{ secrets.OSS_BUCKET }} # 阿里云OSS Bucket名称
+        OSS_ACCESS_KEY_ID: ${{ secrets.OSS_ACCESS_KEY_ID }} # 阿里云Access Key ID
+        OSS_ACCESS_KEY_SECRET: ${{ secrets.OSS_ACCESS_KEY_SECRET }} # 阿里云Access Key Secret
+        OSS_REGION: ${{ secrets.OSS_REGION }} # 阿里云OSS Region
+        OSS_ENDPOINT: ${{ secrets.OSS_ENDPOINT }} # 阿里云OSS Endpoint
+      run: |
+        # 安装阿里云OSS CLI工具
+        npm install oss-cli -g
+        # 配置阿里云OSS
+        oss config -i $OSS_ACCESS_KEY_ID -k $OSS_ACCESS_KEY_SECRET -e $OSS_REGION
+        # 上传文件到OSS
+        oss put -f ./dist oss://$OSS_BUCKET/ -r
+
+    - name: Refresh CDN
+      env:
+        CDN_REFRESH_TOKEN: ${{ secrets.CDN_REFRESH_TOKEN }} # CDN刷新Token
+        CDN_REFRESH_URL: ${{ secrets.CDN_REFRESH_URL }} # CDN刷新URL
+      run: |
+        # 发送请求刷新CDN
+        curl -X POST $CDN_REFRESH_URL -H "Authorization: Bearer $CDN_REFRESH_TOKEN" -d '{
+          "path": "/*",
+          "type": "all"
+        }'
