@@ -68,4 +68,4 @@ jobs:
       # 刷新阿里云 CDN 缓存
       - name: Refresh Aliyun CDN Cache
         run: |
-          aliyuncli cdn RefreshObjectCaches --region cn-beijing --ObjectType File --Force true --ObjectPath ${{ ALIYUN_CDN_DOMAIN}}
+          aliyuncli cdn RefreshObjectCaches --region cn-beijing --ObjectType File --Force true --ObjectPath ${{ secrets.ALIYUN_CDN_DOMAIN }}
