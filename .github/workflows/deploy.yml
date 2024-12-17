@@ -55,17 +55,27 @@ jobs:
         run: |
           # 将本地构建的文件递归复制到 OSS 存储桶中
           ./ossutil64 cp --recursive ./pages/dist oss://${{ secrets.ALIYUN_OSS_BUCKET_DIR }}/
-          # 安装阿里云 CLI 工具
       - name: Install Aliyun CLI
         run: |
-          curl https://raw.githubusercontent.com/aliyun/aliyun-cli/master/scripts/install.sh | sh
+          curl -o aliyun-cli.tgz https://aliyuncli.aliyuncs.com/aliyun-cli-linux-latest-amd64.tgz
+          mkdir -p $HOME/aliyun
+          tar -xzf aliyun-cli.tgz -C $HOME/aliyun
+          sudo mv $HOME/aliyun/aliyun /usr/local/bin/
 
-      # 配置阿里云 CLI（使用存储在secrets中的密钥信息）
       - name: Configure Aliyun CLI
-        run: |
-          aliyuncli configure set --profile default --access-key-id ${{ secrets.ALIYUN_ACCESS_KEY_ID }} --access-key-secret ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }} --region cn-beijing
+          run: |
+          export PATH="$PATH:/usr/local/bin/"
+          aliyun configure set \
+          --profile AkProfile \
+          --mode AK \
+          --access-key-id ${{ secrets.ALIYUN_ACCESS_KEY_ID }} \
+          --access-key-secret ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }} \
+          --region cn-beijing
 
-      # 刷新阿里云 CDN 缓存
-      - name: Refresh Aliyun CDN Cache
-        run: |
-          aliyuncli cdn RefreshObjectCaches --region cn-beijing --ObjectType File --Force true --ObjectPath ${{ secrets.ALIYUN_CDN_DOMAIN }}
+    - name: Verify Aliyun CLI Installation
+      run: |
+        aliyun version
+
+    - name: Refresh Aliyun CDN Cache
+      run: |
+        aliyun cdn:RefreshObjectCaches --region cn-beijing --ObjectType File --Force true --ObjectPath ${{ secrets.ALIYUN_CDN_DOMAIN }}
