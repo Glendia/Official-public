@@ -1,31 +1,26 @@
-name: Deploy VitePress to GitHub Pages then Aliyun OSS and Invalidate CDN Cache
+name: Deploy VitePress to GitHub Pages
 
 on:
   push:
     branches:
-      - main # 触发分支
-
-env:
-  NODE_VERSION: '18' # Node.js版本
-  BUILD_DIR: 'pages/.vitepress/dist' # 构建输出目录
-  ALIYUN_OSS_BUCKET: ${{ secrets.ALIYUN_OSS_BUCKET }} # 阿里云OSS Bucket名称
-  ALIYUN_OSS_REGION: ${{ secrets.ALIYUN_OSS_REGION }} # 阿里云OSS区域ID
-  ALIYUN_OSS_ENDPOINT: ${{ secrets.ALIYUN_OSS_ENDPOINT }} # 阿里云OSS Endpoint
-  CDN_DOMAIN: ${{ secrets.CDN_DOMAIN }} # CDN域名
+      - main
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
+          node-version: '18'
+
+      - name: Set up pnpm
+        run: |
+          npm i -g pnpm
+          pnpm config set store-dir $HOME/.pnpm-store
 
       - name: Install dependencies
         run: pnpm install
@@ -33,35 +28,9 @@ jobs:
       - name: Build VitePress site
         run: pnpm run build
 
-      # 第一步：部署到GitHub Pages
       - name: Deploy to GitHub Pages
-        id: deploy-gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ${{ env.BUILD_DIR }}
-          commit_message: 'Deploy VitePress site to GitHub Pages'
-
-      # 第二步：Sync with Aliyun OSS
-      - name: Sync with Aliyun OSS
-        id: sync
-        uses: alibaba-actions/oss-sync@v1
-        with:
-          oss-bucket: ${{ env.ALIYUN_OSS_BUCKET }}
-          oss-region: ${{ env.ALIYUN_OSS_REGION }}
-          local-dir: ${{ env.BUILD_DIR }}
-          access-key-id: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
-          access-key-secret: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
-          endpoint: ${{ env.ALIYUN_OSS_ENDPOINT }}
-          mode: 'sync'
-          only-changed: true
-
-      # 第三步：Invalidate CDN Cache
-      - name: Invalidate CDN Cache
-        if: steps.sync.outputs.changed == 'true' # 只有当有更改时才刷新CDN
-        uses: alibaba-actions/cdn-invalidate@v1
-        with:
-          cdn-domain: ${{ env.CDN_DOMAIN }}
-          access-key-id: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
-          access-key-secret: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
-          paths: '**'
+          publish_dir: pages/.vitepress/dist
+          publish_branch: gh-pages
