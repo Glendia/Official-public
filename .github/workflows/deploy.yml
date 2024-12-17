@@ -55,27 +55,3 @@ jobs:
         run: |
           # 将本地构建的文件递归复制到 OSS 存储桶中
           ./ossutil64 cp --recursive ./pages/dist oss://${{ secrets.ALIYUN_OSS_BUCKET_DIR }}/
-      - name: Install Aliyun CLI
-        run: |
-          curl -o aliyun-cli.tgz https://aliyuncli.aliyuncs.com/aliyun-cli-linux-latest-amd64.tgz
-          mkdir -p $HOME/aliyun
-          tar -xzf aliyun-cli.tgz -C $HOME/aliyun
-          sudo mv $HOME/aliyun/aliyun /usr/local/bin/
-
-      - name: Configure Aliyun CLI
-          run: |
-          export PATH="$PATH:/usr/local/bin/"
-          aliyun configure set \
-          --profile AkProfile \
-          --mode AK \
-          --access-key-id ${{ secrets.ALIYUN_ACCESS_KEY_ID }} \
-          --access-key-secret ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }} \
-          --region cn-beijing
-
-    - name: Verify Aliyun CLI Installation
-      run: |
-        aliyun version
-
-    - name: Refresh Aliyun CDN Cache
-      run: |
-        aliyun cdn:RefreshObjectCaches --region cn-beijing --ObjectType File --Force true --ObjectPath ${{ secrets.ALIYUN_CDN_DOMAIN }}
