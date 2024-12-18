@@ -1,4 +1,7 @@
-<h1><center>业务介绍和协议</center></h1>
+<div align="center">
+  <h1>业务介绍和协议</h1>  
+</div>
+
 ## 使用vitepress重构项目
 重构了以下几点
 * 首页  
