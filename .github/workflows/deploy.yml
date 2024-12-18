@@ -49,10 +49,10 @@ jobs:
         run: |
           # 删除指定目录下的所有文件和文件夹（包括子目录）
           # 注意：这将彻底移除目标位置的所有内容，请谨慎使用
-          ./ossutil rm -rf oss://${{ secrets.ALIYUN_OSS_BUCKET_DIR }}/ -i ${{ secrets.ALIYUN_ACCESS_KEY_ID }} -k ${{ secrets.ALIYUN_ACCESS_KEY_SECRET}} --exclude 'static/*' --region cn-beijing
+          ossutil rm -rf oss://${{ secrets.ALIYUN_OSS_BUCKET_DIR }}/ -i ${{ secrets.ALIYUN_ACCESS_KEY_ID }} -k ${{ secrets.ALIYUN_ACCESS_KEY_SECRET}} --exclude 'static/*' --region cn-beijing
           
       # 上传所有新文件到 Aliyun OSS
       - name: Upload all new files to Aliyun OSS
         run: |
           # 将本地构建的文件递归复制到 OSS 存储桶中
-          ./ossutil cp --recursive ./pages/dist oss://${{ secrets.ALIYUN_OSS_BUCKET_DIR }}/ -i ${{ secrets.ALIYUN_ACCESS_KEY_ID }} -k ${{ secrets.ALIYUN_ACCESS_KEY_SECRET}} --region cn-beijing
+          ossutil cp --recursive ./pages/dist oss://${{ secrets.ALIYUN_OSS_BUCKET_DIR }}/ -i ${{ secrets.ALIYUN_ACCESS_KEY_ID }} -k ${{ secrets.ALIYUN_ACCESS_KEY_SECRET}} --region cn-beijing
