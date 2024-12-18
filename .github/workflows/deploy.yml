@@ -48,8 +48,8 @@ jobs:
         run: |
           # 删除指定目录下的所有文件和文件夹（包括子目录）
           # 注意：这将彻底移除目标位置的所有内容，请谨慎使用
-          ./ossutil64 rm -rf oss://${{ secrets.ALIYUN_OSS_BUCKET_DIR }}/
-
+          ./ossutil64 rm -rf oss://${{ secrets.ALIYUN_OSS_BUCKET_DIR }}/ --exclude 'static/*'
+          
       # 上传所有新文件到 Aliyun OSS
       - name: Upload all new files to Aliyun OSS
         run: |
