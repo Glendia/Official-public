@@ -201,11 +201,7 @@
   --vp-c-text-3: #929295;
 }
 
-.dark {
-  --vp-c-text-1: #dfdfd6;
-  --vp-c-text-2: #98989f;
-  --vp-c-text-3: #6a6a71;
-}
+
 
 /**
  * Colors: Function
@@ -548,14 +544,6 @@
 /**
  * Component: Home
  * -------------------------------------------------------------------------- */
-
-:root {
-  --vp-home-hero-name-color: var(--vp-c-brand-1);
-  --vp-home-hero-name-background: transparent;
-
-  --vp-home-hero-image-background-image: none;
-  --vp-home-hero-image-filter: none;
-}
 
 /**
  * Component: Badge

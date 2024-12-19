@@ -1,6 +1,6 @@
 //export * from './algolia'
 //export * from '.carbonads'
-//export * from './head'
+export * from './head'
 //export * from './footer'
 export * from './nav'
 export * from './sidebar'

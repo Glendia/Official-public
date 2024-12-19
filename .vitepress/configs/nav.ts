@@ -1,35 +1,19 @@
-export const nav = [ {
+export const nav = [ 
+  {
     text: "首页",
     link: "/"
   },
   {
-    text: "文档",
-    link: "/docs/"
+    text: "产品列表",
+    link: "/project/"
+  },
+  {
+    text: "法律协议",
+    link: "/agreement/"
   },
   {
     text: '团队',
     link: 'team'
-  },
-  {
-    text: 'Dropdown Menu',
-    items: [ {
-        text: 'Item A',
-        link: '/item-1'
-      },
-      {
-        text: 'Item B',
-        link: '/item-2'
-      },
-      {
-        text: 'Item C',
-        link: '/item-3'
-      }
-    ]
-  },
-  {
-    text: 'Merchandise',
-    link: 'https://www.thegithubshop.com/',
-    target: '_self',
-    rel: 'sponsored'
   }
 ]
+  

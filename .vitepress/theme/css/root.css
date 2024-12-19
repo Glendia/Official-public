@@ -4,6 +4,12 @@
     --vp-c-bg: #ffffff;
 /*侧边栏*/
   --vp-sidebar-bg-color: #edf4ff;
-  
-    
+}
+/*home首页*/
+:root {
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #0066ff 0%, #005bea 100%) !important;
+}
+:root{
+      --vp-c-indigo-1: #1663ff !important;
 }

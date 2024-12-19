@@ -1,4 +1,15 @@
 /*深色模式*/
+/*背景颜色*/
 .dark {
     --vp-c-bg: #121212;
+}
+/*侧边栏*/
+.dark{
+    --vp-sidebar-bg-color: #1d1d1d;
+}
+/*文字颜色*/
+.dark {
+  --vp-c-text-1: #ffffff;
+  --vp-c-text-2: #98989f;
+  --vp-c-text-3: #6a6a71;
 }
