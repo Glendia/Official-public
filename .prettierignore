@@ -1,0 +1,8 @@
+dist
+.git
+pnpm-lock.yaml
+cache
+temp
+.temp
+*.vue
+.vitepress/cache
