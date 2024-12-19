@@ -1,3 +1,9 @@
+/*浅色模式*/
+/*背景*/
 :root {
     --vp-c-bg: #ffffff;
+/*侧边栏*/
+  --vp-sidebar-bg-color: #edf4ff;
+  
+    
 }

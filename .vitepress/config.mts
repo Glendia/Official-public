@@ -1,24 +1,14 @@
 import { defineConfig } from 'vitepress'
-import { nav } from "./configs"
-// https://vitepress.dev/reference/site-config
+import { nav,sidebar} from "./configs"
 export default defineConfig({
   title: "My Awesome Project",
   description: "A VitePress Site",
   outDir: "dist",
   srcDir: "content",
   themeConfig: {
-    // https://vitepress.dev/reference/default-theme-config
     nav: nav,
-
-    sidebar: [
-      {
-        text: 'Examples',
-        items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' }
-        ]
-      }
-    ],
+    sidebar: sidebar,
+    //footer: footer,
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/vuejs/vitepress' }

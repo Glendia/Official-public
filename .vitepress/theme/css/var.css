@@ -1,0 +1,9 @@
+/*
+全局公共样式
+类名修改等
+*/
+* {
+    /*全局字体*/
+  --vp-font-family-base: 'PingFang SC', Arial,sans-serif; /* normal text font */
+  --vp-font-family-mono: 'PingFang SC', Arial,sans-serif;/* code font */
+}
